@@ -42,18 +42,18 @@ defmodule Rocketpay.User do
 		|> Enum.join("")
 		|> insert_passwordhash_into_changeset(changeset)
 	end
+	defp put_password_hash(changeset), do: changeset
 
 	defp insert_passwordhash_into_changeset(password, changeset) do
 		change(changeset, %{:password_hash => password})
 	end
 
-	defp put_password_hash(changeset), do: changeset
 
 
 	# #Via patter match, se o Changeset recebido for valido [valid?: true], de [changes] a função tera acesso ao [password]
-	# defp put_password_hash(%Changeset{valid?: true, changes: %{password: password}} = changeset) do	
+	# defp put_password_hash(%Changeset{valid?: true, changes: %{password: password}} = changeset) do
 	# 	# change(changeset, Bcrypt.add_hash(password))
-		
+
 	# end
 
 	# #Em outro caso onde não houver match na função a cima, simplesmente sera retornado o mesmo changeset
