@@ -34,19 +34,23 @@ defmodule Rocketpay.User do
 	end
 
 	defp put_password_hash(%Changeset{valid?: true, changes: %{password: password}} = changeset) do
-		password
-		|> String.split("", trim: true)
-		|> Stream.map(fn item -> String.to_integer(item) end)
-		|> Stream.map(fn item -> item * 2 end)
-		|> Stream.map(fn item -> Integer.to_string(item) end)
-		|> Enum.join("")
-		|> insert_passwordhash_into_changeset(changeset)
+		change(changeset, Pbkdf2.add_hash(password))
 	end
-	defp put_password_hash(changeset), do: changeset
+	# defp put_password_hash(%Changeset{valid?: true, changes: %{password: password}} = changeset) do
+	# 	password
+	# 	|> Pbkdf2()
+	# 	|> String.split("", trim: true)
+	# 	|> Stream.map(fn item -> String.to_integer(item) end)
+	# 	|> Stream.map(fn item -> item * 2 end)
+	# 	|> Stream.map(fn item -> Integer.to_string(item) end)
+	# 	|> Enum.join("")
+	# 	|> insert_passwordhash_into_changeset(changeset)
+	# end
+	# defp put_password_hash(changeset), do: changeset
 
-	defp insert_passwordhash_into_changeset(password, changeset) do
-		change(changeset, %{:password_hash => password})
-	end
+	# defp insert_passwordhash_into_changeset(password, changeset) do
+	# 	change(changeset, %{:password_hash => password})
+	# end
 
 
 
