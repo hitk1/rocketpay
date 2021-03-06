@@ -14,9 +14,6 @@ defmodule Rocketpay.Users.Create do
                 {:ok, repo.preload(user, :account)}
             end)
         |> run_transaction()
-        # params
-        # |> User.changeset()
-        # |> Repo.insert()
     end
 
     defp insert_account(repo, user_id) do
