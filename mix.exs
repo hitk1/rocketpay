@@ -45,6 +45,7 @@ defmodule Rocketpay.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:pbkdf2_elixir, "~> 1.3"},
+      {:decimal, "~> 2.0"}
     ]
   end
 
