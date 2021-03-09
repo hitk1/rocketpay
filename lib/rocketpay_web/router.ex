@@ -1,14 +1,31 @@
 defmodule RocketpayWeb.Router do
   use RocketpayWeb, :router
 
+  import Plug.BasicAuth
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  #Os plugs são como os middlewares que existem no Express.js, por exemplo.
+  #Neste exemplo, o plug [:basic_auth] ja vem criado por padrão com Phoenix e só esta sendo "reutilizado"
+  #Mas há formas de criar plugs personalizados de acordo com a necessidade
+  pipeline :auth do
+    plug :basic_auth, Application.compile_env(:rocketpay, :basic_auth)
   end
 
   scope "/api", RocketpayWeb do
     pipe_through :api
 
     post "/users", UsersController, :create
+
+    # post "/accounts/:id/deposit", AccountsController, :deposit
+    # post "/accounts/:id/withdraw", AccountsController, :withdraw
+    # post "/accounts/transaction", AccountsController, :transaction
+  end
+
+  scope "/api", RocketpayWeb do
+    pipe_through [:api, :auth]  #Este [pipe_through] indica que o plug sera usado nas rotas que sussederem ele, no caso, todas as rotas de [accounts]
 
     post "/accounts/:id/deposit", AccountsController, :deposit
     post "/accounts/:id/withdraw", AccountsController, :withdraw
